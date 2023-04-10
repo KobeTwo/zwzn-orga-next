@@ -7,6 +7,7 @@ import {
   IconQuestionMark,
 } from '@tabler/icons-react';
 import { EventResponseControl } from './EventResponseControl';
+import { EventProps } from '../types';
 
 
 
@@ -20,7 +21,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 interface EventListProps {
-    data: { startDate: string; type: string; id: string }[];
+    data: EventProps[];
 }
 
 export function EventList({ data }: EventListProps) {
@@ -58,7 +59,10 @@ export function EventList({ data }: EventListProps) {
               <Text size="sm" weight={500}>
                 {formattedStartDate}
               </Text>
-              <EventResponseControl eventId={item.id} initialValue='maybe'/>
+              <EventResponseControl 
+                eventId={item.id} 
+                responses={item.responses}
+              />
             </Group>
           </td>
         </tr>
