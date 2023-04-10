@@ -1,5 +1,14 @@
 import { useState } from 'react';
-import { createStyles, Table, Checkbox, ScrollArea, Group, Avatar, Text, rem } from '@mantine/core';
+import { createStyles, Table, Checkbox, ScrollArea, Group, Text, rem , Center, Box} from '@mantine/core';
+import { SegmentedControl } from '@mantine/core';
+import {
+  IconThumbUp,
+  IconThumbDown,
+  IconQuestionMark,
+} from '@tabler/icons-react';
+import { EventResponseControl } from './EventResponseControl';
+
+
 
 const useStyles = createStyles((theme) => ({
     rowSelected: {
@@ -49,6 +58,7 @@ export function EventList({ data }: EventListProps) {
               <Text size="sm" weight={500}>
                 {formattedStartDate}
               </Text>
+              <EventResponseControl eventId={item.id} initialValue='maybe'/>
             </Group>
           </td>
         </tr>
