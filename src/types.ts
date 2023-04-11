@@ -6,7 +6,7 @@ export interface EventProps {
 }
 
 export interface EventResponseProps {
-    id: String;
+    id: string;
     response: string;
     playerName: string;
     playerId: string;
