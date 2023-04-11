@@ -1,4 +1,4 @@
-import { Navbar, Center, Tooltip, UnstyledButton, createStyles, Stack, rem } from '@mantine/core';
+import { Navbar, Center, Tooltip, UnstyledButton, createStyles, Stack, rem, Avatar } from '@mantine/core';
 import {
   IconHome,
   IconCalendarEvent,
@@ -11,6 +11,8 @@ import {
 import { useState } from 'react';
 import Logo from './Logo';
 import Link from 'next/link'
+import { useContext } from 'react';
+import { CurrentPlayerContext } from '../provider/CurrentPlayerProvider';
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -70,6 +72,7 @@ interface NavBarProps {
 
 const NavBar = ({}: NavBarProps) => {
     const [active, setActive] = useState(2);
+    const { currentPlayer, setCurrentPlayer } = useContext(CurrentPlayerContext);
 
     const links = mockdata.map((link, index) => (
       <NavbarLink
@@ -92,6 +95,10 @@ const NavBar = ({}: NavBarProps) => {
           </Navbar.Section>
           <Navbar.Section>
             <Stack justify="center" spacing={0}>
+              CP: {currentPlayer?.id}
+              <Avatar alt={currentPlayer?.playerName} size="md" src={currentPlayer?.imageURL ? process.env.NEXT_PUBLIC_STRAPI_HOST + currentPlayer?.imageURL : null} radius="md" >
+                {currentPlayer?.playerName.charAt(0).toUpperCase()} 
+              </Avatar>
               <NavbarLink icon={IconLogout} label="Logout" href='/'/>
             </Stack>
           </Navbar.Section>

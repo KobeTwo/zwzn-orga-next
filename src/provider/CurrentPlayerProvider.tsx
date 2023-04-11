@@ -1,8 +1,10 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { useSession } from "next-auth/react"
+import { useSession } from 'next-auth/react';
 
 interface PlayerData {
-  // Your additional player data here
+  id: string,
+  playerName: string,
+  imageURL: string
 }
 
 interface CurrentPlayerContextType {
@@ -21,19 +23,49 @@ export const CurrentPlayerContext = createContext<CurrentPlayerContextType>({
 
 export const CurrentPlayerProvider = ({ children }: CurrentPlayerProviderProps) => {
   const [currentPlayer, setCurrentPlayer] = useState<PlayerData | null>(null);
+  const { data: session } = useSession();
 
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const storageData = JSON.parse(sessionStorage.getItem('currentPlayer'));
+            if (session){
+                console.log('before fetch');
+                fetch(process.env.NEXT_PUBLIC_STRAPI_HOST + '/api/players?filters[managerEmails][$contains]=' + session.user.email + '&populate=*')
+                .then((response) => response.json())
+                .then((data) => {
+                if (data.data.length > 0) {
+                    console.log('data.data[0].id:' + data.data[0].id);
+                    console.log('storageData.id:' +  storageData?.id);
+                    console.log(data.data[0].id === storageData?.id);
+                    console.log('storage data:' + storageData);
+                    const player = data.data.find(p => p.id === storageData?.id);
+                    let playerData : PlayerData;
+                    if(player){
+                        console.log('found player:' + player);
+                        playerData = {
+                            id: player.id,
+                            playerName: player.attributes.name,
+                            imageURL: player?.attributes?.image?.data?.attributes?.url,
+                        };
+                    }else{
+                        console.log('not found player:');
+                        playerData = {
+                            id: data.data[0].id,
+                            playerName: data.data[0].attributes.name,
+                            imageURL: data.data[0].attributes.image.data.attributes.url,
+                        };
+                    }
+                    setCurrentPlayer(playerData);
+                }
+                })
+                .catch((error) => console.error(error));
+            }
+        }
+    }, [session]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const sessionData = sessionStorage.getItem('currentPlayer');
-      if (sessionData) {
-        setCurrentPlayer(JSON.parse(sessionData));
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && currentPlayer) {
+        console.log('Setting session storage ' + currentPlayer);
         sessionStorage.setItem('currentPlayer', JSON.stringify(currentPlayer));
     }
   }, [currentPlayer]);

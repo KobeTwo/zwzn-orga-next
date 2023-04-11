@@ -6,6 +6,8 @@ import {
   IconQuestionMark,
 } from '@tabler/icons-react';
 import React, { useState, useEffect } from 'react';
+import { useContext } from 'react';
+import { CurrentPlayerContext } from '../provider/CurrentPlayerProvider';
 
 
 interface EventControlResponseProps {
@@ -24,9 +26,10 @@ interface ResponseState {
 export function EventResponseControl(props: EventControlResponseProps) {
 
   const [selectedResponse, setSelectedResponse] = useState<ResponseState | null>(null);
+  const { currentPlayer, setCurrentPlayer } = useContext(CurrentPlayerContext);
   useEffect(() => {
     if(props.responses){
-        const initialResponse = props.responses.find(response => response.playerName === 'kimi');
+        const initialResponse = props.responses.find(response => response.playerId === currentPlayer?.id);
         if(initialResponse ){
             console.log('HANDLE USE EFFECT:' +JSON.stringify(initialResponse))
             setSelectedResponse(
@@ -37,7 +40,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
                 })
         }
     }
-  }, [props.eventId, props.responses]);
+  }, [currentPlayer, props.eventId, props.responses]);
 
   const updateEventResponseDB = async (id: string | undefined, response: string, eventId: string, playerId: string): Promise<string | undefined> => {
     try {
@@ -79,13 +82,13 @@ export function EventResponseControl(props: EventControlResponseProps) {
             playerId: selectedResponse.playerId
         });
     }else{
-        let eventResponseId = await updateEventResponseDB(undefined, value, props.eventId, "4");
+        let eventResponseId = await updateEventResponseDB(undefined, value, props.eventId, currentPlayer.id);
         console.log('EventResponseID: ' + eventResponseId);
-        if(eventResponseId ){
+        if(eventResponseId && currentPlayer){
             setSelectedResponse({
                 id: eventResponseId,
                 response: value,
-                playerId: '4'
+                playerId: currentPlayer.id
             });
         }
     }
