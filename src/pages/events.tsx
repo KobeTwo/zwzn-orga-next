@@ -12,7 +12,6 @@ const EventsPage: NextPage<EventsProps> = ({ eventData }) => {
     return (
         <>
           <Layout title="Events"> 
-          <LoginButton></LoginButton>
           <EventList data={eventData}></EventList>
         </Layout>
         </>

@@ -1,5 +1,11 @@
 import React, { PropsWithChildren } from 'react';
 import { useSession, signIn, signOut } from "next-auth/react"
+import { ActionIcon, Button } from '@mantine/core';
+import {
+  IconLogin,
+  IconLogout,
+} from '@tabler/icons-react';
+import { Image } from '@mantine/core';
 
 interface LoginButtonProps {
   // Define your props here
@@ -12,15 +18,17 @@ const LoginButton: React.FC<PropsWithChildren<LoginButtonProps>> = ({ children }
         console.log("session: "+ JSON.stringify(session))
       return (
         <>
-          Signed in as {session.user.email} <br />
-          <button onClick={() => signOut()}>Sign out</button>
+          <ActionIcon onClick={() => signOut()}>
+            <IconLogout />
+          </ActionIcon>
         </>
       )
     }
     return (
       <>
-        Not signed in <br />
-        <button onClick={() => signIn()}>Sign in</button>
+        <Button leftIcon={<IconLogin/>} onClick={() => signIn()}>
+          Login
+        </Button>
       </>
     )
 };

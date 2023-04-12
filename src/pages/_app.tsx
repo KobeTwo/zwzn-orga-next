@@ -7,13 +7,13 @@ import { CurrentPlayerProvider } from '../provider/CurrentPlayerProvider';
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider session={pageProps.session}>
-      <CurrentPlayerProvider>
+      <CurrentPlayerProvider >
         <MantineProvider
           withGlobalStyles
           withNormalizeCSS
           theme={{
             /** Put your mantine theme override here */
-            colorScheme: 'light',
+            colorScheme: 'dark',
           }}
         >
           <Component {...pageProps} />

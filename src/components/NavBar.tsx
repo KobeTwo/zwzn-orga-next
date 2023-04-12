@@ -73,6 +73,7 @@ interface NavBarProps {
 const NavBar = ({}: NavBarProps) => {
     const [active, setActive] = useState(2);
     const { currentPlayer, setCurrentPlayer } = useContext(CurrentPlayerContext);
+    const [opened, setOpened] = useState(false);
 
     const links = mockdata.map((link, index) => (
       <NavbarLink
@@ -84,7 +85,7 @@ const NavBar = ({}: NavBarProps) => {
     ));
     return (
       <>
-        <Navbar height={750} width={{ base: 80 }} p="md">
+        <Navbar width={{ base: 80 }} p="md" hiddenBreakpoint="sm" hidden={!opened}>
           <Center>
             <Logo/>
           </Center>
