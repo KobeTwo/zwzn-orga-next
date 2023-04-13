@@ -2,6 +2,8 @@ import { createStyles, Table, ScrollArea, Group, Text} from '@mantine/core';
 import { EventResponseControl } from './EventResponseControl';
 import { EventProps } from '../types';
 
+import {IconBallFootball, IconTournament, IconRun, IconHome} from '@tabler/icons-react';
+
 
 interface EventListProps {
     data: EventProps[];
@@ -9,28 +11,65 @@ interface EventListProps {
 
 export function EventList({ data }: EventListProps) {
     const rows = data.map((item) => {
-      const startDate = new Date(item.startDate);
-      const formattedStartDate = startDate.toLocaleString("de-DE", { 
-        year: 'numeric', 
+      const startDate = item.startDate ? new Date(item.startDate) : null;
+      const formattedStartDate = startDate?.toLocaleString("de-DE", { 
+        weekday: 'short',
         month: 'long', 
         day: 'numeric' 
+      });
+      const startTime = item.startDate && item.startTime ? new Date(item.startDate + 'T' + item.startTime + 'Z'): null;
+      const formattedStartTime = startTime?.toLocaleString("de-DE", { 
+        hour: '2-digit',
+        minute: '2-digit', 
       });
       return (
         <tr key={item.id}>
           <td>
-              <Text size="sm" weight={500}>
-                {item.type}
-              </Text>
+            <Text size="sm">
+              {(() => {
+                switch (item.type) {
+                  case 'game':
+                    return <IconBallFootball/>;
+                  case 'friendly':
+                    return <IconBallFootball/>;
+                  case 'tournament':
+                    return <IconTournament/>;
+                  case 'training':
+                    return <IconRun/>;
+                  case 'indoortraining':
+                    return <IconHome/>;
+                  default:
+                    return <IconRun/>;
+                }
+              })()}
+            </Text>
           </td>
           <td>
-            <Group spacing="sm">
-              <Text size="sm" weight={500}>
-                {formattedStartDate}
-              </Text>
-            </Group>
+            <Text size="sm" >
+            {(() => {
+              switch (true) {
+                case (!!item.title):
+                  return item.title;
+                case (!!item.opponent):
+                  return item.opponent;
+                default:
+                  return "Event";
+                }
+              })()}
+            </Text>
           </td>
           <td>
-            <Group spacing="sm">
+            <Text size="sm" >
+              {formattedStartDate}
+            </Text>
+          </td>
+          <td>
+            <Text size="sm" >
+              {formattedStartTime}
+            </Text>
+          </td>
+          <td>
+            <Group spacing="sm" position='right'>
               <EventResponseControl 
                 eventId={item.id} 
                 responses={item.responses}

@@ -35,9 +35,12 @@ export const getServerSideProps: GetServerSideProps<EventsProps> = async (contex
       }
         return {
             startDate: event.attributes.startDate,
+            startTime: event.attributes.startTime,
             type: event.attributes.type,
             id: event.id,
             responses: responses,
+            opponent: event.attributes.opponent,
+            title: event.attributes.title,
         }
       })
     const _props: EventsProps = {
