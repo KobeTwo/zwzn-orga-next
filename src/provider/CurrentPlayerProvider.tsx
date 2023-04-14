@@ -40,7 +40,7 @@ export const CurrentPlayerProvider = ({ children }: CurrentPlayerProviderProps) 
                         console.log('storageData.id:' +  parsedStorageData?.id);
                         console.log(data.data[0].id === parsedStorageData?.id);
                         console.log('storage data:' + parsedStorageData);
-                        const player = data.data.find(p => p.id === parsedStorageData?.id);
+                        const player = data.data.find((p: any) => p.id === parsedStorageData?.id);
                         let playerData : PlayerData;
                         if(player){
                             console.log('found player:' + player);
