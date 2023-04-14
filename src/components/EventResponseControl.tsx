@@ -138,7 +138,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
                     value: 'no' },
                 ]}
                 
-                value={selectedResponse?.response ? selectedResponse?.response : undefined}
+                value={selectedResponse?.response ?? ''}
                 color={getColor()}
                 onChange={handleSegmentChange}
               />
