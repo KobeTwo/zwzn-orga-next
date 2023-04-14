@@ -71,7 +71,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
     }
   };
 
-  const handleSegmentChange = async (value) => {
+  const handleSegmentChange = async (value:string) => {
 
     if (selectedResponse && value !== selectedResponse.response) {
         console.log(`Selected value: ${value} for event ID: ${props.eventId}`);
@@ -82,14 +82,16 @@ export function EventResponseControl(props: EventControlResponseProps) {
             playerId: selectedResponse.playerId
         });
     }else{
-        let eventResponseId = await updateEventResponseDB(undefined, value, props.eventId, currentPlayer.id);
-        console.log('EventResponseID: ' + eventResponseId);
-        if(eventResponseId && currentPlayer){
-            setSelectedResponse({
-                id: eventResponseId,
-                response: value,
-                playerId: currentPlayer.id
-            });
+        if(currentPlayer){
+            let eventResponseId = await updateEventResponseDB(undefined, value, props.eventId, currentPlayer.id);
+            console.log('EventResponseID: ' + eventResponseId);
+            if(eventResponseId ){
+                setSelectedResponse({
+                    id: eventResponseId,
+                    response: value,
+                    playerId: currentPlayer.id
+                });
+            }
         }
     }
     
@@ -136,7 +138,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
                     value: 'no' },
                 ]}
                 
-                value={selectedResponse?.response ? selectedResponse?.response : null}
+                value={selectedResponse?.response ? selectedResponse?.response : undefined}
                 color={getColor()}
                 onChange={handleSegmentChange}
               />

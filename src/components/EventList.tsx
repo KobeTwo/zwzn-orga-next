@@ -1,8 +1,8 @@
-import { createStyles, Table, ScrollArea, Group, Text} from '@mantine/core';
+import { Table, ScrollArea, Group, Text, Center} from '@mantine/core';
 import { EventResponseControl } from './EventResponseControl';
 import { EventProps } from '../types';
 
-import {IconBallFootball, IconTournament, IconRun, IconHome} from '@tabler/icons-react';
+import {IconBallFootball, IconTournament, IconRun, IconHome, IconUsers, IconPlayerPlay} from '@tabler/icons-react';
 
 
 interface EventListProps {
@@ -19,6 +19,11 @@ export function EventList({ data }: EventListProps) {
       });
       const startTime = item.startDate && item.startTime ? new Date(item.startDate + 'T' + item.startTime + 'Z'): null;
       const formattedStartTime = startTime?.toLocaleString("de-DE", { 
+        hour: '2-digit',
+        minute: '2-digit', 
+      });
+      const meetTime = item.startDate && item.startTime ? new Date(item.startDate + 'T' + item.meetTime + 'Z'): null;
+      const formattedMeetTime = startTime?.toLocaleString("de-DE", { 
         hour: '2-digit',
         minute: '2-digit', 
       });
@@ -64,9 +69,20 @@ export function EventList({ data }: EventListProps) {
             </Text>
           </td>
           <td>
-            <Text size="sm" >
-              {formattedStartTime}
+          <Center>
+            <Text size="lg">
+              {formattedStartTime ? (
+                <>
+                  <IconPlayerPlay size={20}/> {formattedStartTime}
+                </>
+              ) : ''}
+              {formattedMeetTime ? (
+                <>
+                  <IconUsers/> {formattedMeetTime}
+                </>
+              ) : ''}
             </Text>
+            </Center>
           </td>
           <td>
             <Group spacing="sm" position='right'>
