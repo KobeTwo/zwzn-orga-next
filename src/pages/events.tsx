@@ -8,6 +8,41 @@ interface EventsProps {
     eventData: EventProps[];
 }
 
+interface Event {
+  attributes: {
+    startDate: string;
+    startTime: string;
+    type: string;
+    opponent: string;
+    title: string;
+    event_responses?: {
+      data: Array<{
+        id: string;
+        attributes: {
+          response: string;
+          player: {
+            data: {
+              id: string;
+              attributes: {
+                name: string;
+              };
+            };
+          };
+        };
+      }>;
+    };
+  };
+  id: string;
+}
+
+interface Response {
+  id: string;
+  response: string;
+  playerId: string;
+  playerName: string;
+}
+
+
 const EventsPage: NextPage<EventsProps> = ({ eventData }) => {
     return (
         <>
@@ -21,8 +56,8 @@ const EventsPage: NextPage<EventsProps> = ({ eventData }) => {
 export const getServerSideProps: GetServerSideProps<EventsProps> = async (context) => {
     const res = await fetch(process.env.NEXT_PUBLIC_STRAPI_HOST + '/api/events?populate[event_responses][populate][0]=player');
     const resJSON = await res.json();
-    const events = resJSON.data.map((event) => {
-    let responses = [];
+    const events = resJSON.data.map((event:Event) => {
+    let responses : Response[] = [];
       if(event.attributes.event_responses && event.attributes.event_responses.data){
         responses = event.attributes.event_responses.data.map((response) => {
           return {
