@@ -29,40 +29,38 @@ export const CurrentPlayerProvider = ({ children }: CurrentPlayerProviderProps) 
         console.log('CURRENT PLAYER PROVIDER: useEffect');
         if (typeof window !== 'undefined') {
             const storageData : string | null = sessionStorage.getItem('currentPlayer');
-            if(storageData){
-                const parsedStorageData = JSON.parse(storageData);
-                if (session){
-                    console.log('CURRENT PLAYER PROVIDER: before fetch');
-                    fetch(process.env.NEXT_PUBLIC_STRAPI_HOST + '/api/players?filters[managerEmails][$contains]=' + session.user?.email + '&populate=*')
-                    .then((response) => response.json())
-                    .then((data) => {
-                    if (data.data.length > 0) {
-                        console.log('data.data[0].id:' + data.data[0].id);
-                        console.log('storageData.id:' +  parsedStorageData?.id);
-                        console.log(data.data[0].id === parsedStorageData?.id);
-                        console.log('storage data:' + parsedStorageData);
-                        const player = data.data.find((p: any) => p.id === parsedStorageData?.id);
-                        let playerData : PlayerData;
-                        if(player){
-                            console.log('found player:' + player);
-                            playerData = {
-                                id: player.id,
-                                playerName: player.attributes.name,
-                                imageURL: player?.attributes?.image?.data?.attributes?.url,
-                            };
-                        }else{
-                            console.log('not found player:');
-                            playerData = {
-                                id: data.data[0].id,
-                                playerName: data.data[0].attributes.name,
-                                imageURL: data.data[0].attributes.image.data.attributes.url,
-                            };
-                        }
-                        setCurrentPlayer(playerData);
+            const parsedStorageData = storageData ? JSON.parse(storageData) : null;
+            if (session){
+                console.log('CURRENT PLAYER PROVIDER: before fetch');
+                fetch(process.env.NEXT_PUBLIC_STRAPI_HOST + '/api/players?filters[managerEmails][$contains]=' + session.user?.email + '&populate=*')
+                .then((response) => response.json())
+                .then((data) => {
+                if (data.data.length > 0) {
+                    console.log('data.data[0].id:' + data.data[0].id);
+                    console.log('storageData.id:' +  parsedStorageData?.id);
+                    console.log(data.data[0].id === parsedStorageData?.id);
+                    console.log('storage data:' + parsedStorageData);
+                    const player = data.data.find((p: any) => p.id === parsedStorageData?.id);
+                    let playerData : PlayerData;
+                    if(player){
+                        console.log('found player:' + player);
+                        playerData = {
+                            id: player.id,
+                            playerName: player.attributes.name,
+                            imageURL: player?.attributes?.image?.data?.attributes?.url,
+                        };
+                    }else{
+                        console.log('not found player:');
+                        playerData = {
+                            id: data.data[0].id,
+                            playerName: data.data[0].attributes.name,
+                            imageURL: data.data[0].attributes.image.data.attributes.url,
+                        };
                     }
-                    })
-                    .catch((error) => console.error(error));
+                    setCurrentPlayer(playerData);
                 }
+                })
+                .catch((error) => console.error(error));
             }
         }
     }, [session]);
