@@ -26,12 +26,13 @@ export const CurrentPlayerProvider = ({ children }: CurrentPlayerProviderProps) 
   const { data: session } = useSession();
 
     useEffect(() => {
+        console.log('CURRENT PLAYER PROVIDER: useEffect');
         if (typeof window !== 'undefined') {
             const storageData : string | null = sessionStorage.getItem('currentPlayer');
             if(storageData){
                 const parsedStorageData = JSON.parse(storageData);
                 if (session){
-                    console.log('before fetch');
+                    console.log('CURRENT PLAYER PROVIDER: before fetch');
                     fetch(process.env.NEXT_PUBLIC_STRAPI_HOST + '/api/players?filters[managerEmails][$contains]=' + session.user?.email + '&populate=*')
                     .then((response) => response.json())
                     .then((data) => {
