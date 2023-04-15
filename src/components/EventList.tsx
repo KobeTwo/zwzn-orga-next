@@ -1,10 +1,7 @@
-import {Group, Text, Center, Grid} from '@mantine/core';
-import { EventResponseControl } from './EventResponseControl';
+import {Grid} from '@mantine/core';
 import { EventProps } from '../types';
-import { useState, useEffect } from 'react';
 import EventCard from './EventCard'
 
-import {IconBallFootball, IconTournament, IconRun, IconHome, IconUsers, IconPlayerPlay} from '@tabler/icons-react';
 
 
 interface EventListProps {
@@ -12,7 +9,6 @@ interface EventListProps {
 }
 
 export function EventList({ data }: EventListProps) {
-  const [rowHTML, setRowHTML] = useState<JSX.Element | undefined>();
     return (
       <Grid>
         {data.map(event => (

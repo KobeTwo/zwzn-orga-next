@@ -1,5 +1,4 @@
 import Layout from '../components/Layout';
-import LoginButton from '@/components/LoginButton';
 import { EventList } from '@/components/EventList';
 import { GetServerSideProps, NextPage } from 'next';
 import { EventProps } from '../types';
@@ -12,6 +11,8 @@ interface Event {
   attributes: {
     startDate: string;
     startTime: string;
+    meetTime: string;
+    endTime: string
     type: string;
     opponent: string;
     title: string;
@@ -71,6 +72,8 @@ export const getServerSideProps: GetServerSideProps<EventsProps> = async (contex
         return {
             startDate: event.attributes.startDate,
             startTime: event.attributes.startTime,
+            meetTime: event.attributes.meetTime,
+            endTime: event.attributes.endTime,
             type: event.attributes.type,
             id: event.id,
             responses: responses,

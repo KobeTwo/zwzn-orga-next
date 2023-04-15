@@ -14,4 +14,4 @@ export default withAuth({
   },
 })
 
-export const config = { matcher: ["/admin", "/players"] }
+export const config = { matcher: ["/admin", "/players", "/events"] }

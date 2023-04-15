@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { createStyles, Header, Container, Group, Burger, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { MantineLogo } from '@mantine/ds';
 import Logo from './Logo';
 import LoginButton from './LoginButton';
+import CurrentPlayer from './CurrentPlayer';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -79,6 +79,7 @@ function AppHeader({ links }: AppHeaderProps) {
           {items}
         </Group>
         <Group>
+          <CurrentPlayer/>
           <LoginButton/>
         </Group>
 

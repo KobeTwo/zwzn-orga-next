@@ -115,24 +115,24 @@ export function EventResponseControl(props: EventControlResponseProps) {
   };
 
   return (
-    <SegmentedControl
+    <SegmentedControl fullWidth size='lg'
                 data={[
                   { label:(
                       <Center>
-                        <IconThumbUp size="1rem" />
+                        <IconThumbUp size="1.5rem" />
                       </Center>
                     ), 
                     value: 'yes' 
                   },
                   { label:(
                       <Center>
-                        <IconQuestionMark size="1rem" />
+                        <IconQuestionMark size="1.5rem" />
                       </Center>
                     ), 
                     value: 'maybe' },
                   { label:(
                       <Center>
-                        <IconThumbDown size="1rem" />
+                        <IconThumbDown size="1.5rem" />
                       </Center>
                     ), 
                     value: 'no' },
