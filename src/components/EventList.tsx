@@ -1,6 +1,7 @@
 import { Table, ScrollArea, Group, Text, Center} from '@mantine/core';
 import { EventResponseControl } from './EventResponseControl';
 import { EventProps } from '../types';
+import { useState, useEffect } from 'react';
 
 import {IconBallFootball, IconTournament, IconRun, IconHome, IconUsers, IconPlayerPlay} from '@tabler/icons-react';
 
@@ -10,6 +11,8 @@ interface EventListProps {
 }
 
 export function EventList({ data }: EventListProps) {
+  const [rowHTML, setRowHTML] = useState<JSX.Element | undefined>();
+  useEffect(() => {
     const rows = data.map((item) => {
       const startDate = item.startDate ? new Date(item.startDate) : null;
       const formattedStartDate = startDate?.toLocaleString("de-DE", { 
@@ -27,7 +30,7 @@ export function EventList({ data }: EventListProps) {
         hour: '2-digit',
         minute: '2-digit', 
       });
-      return (
+      setRowHTML(
         <tr key={item.id}>
           <td>
             <Text size="sm">
@@ -95,11 +98,13 @@ export function EventList({ data }: EventListProps) {
         </tr>
       );
     });
+  }, [data]);
+    
   
     return (
       <ScrollArea>
         <Table verticalSpacing="sm">
-          <tbody>{rows}</tbody>
+          <tbody>{rowHTML}</tbody>
         </Table>
       </ScrollArea>
     );
