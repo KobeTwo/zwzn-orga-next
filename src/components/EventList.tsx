@@ -1,7 +1,8 @@
-import { Table, ScrollArea, Group, Text, Center} from '@mantine/core';
+import {Group, Text, Center, Grid} from '@mantine/core';
 import { EventResponseControl } from './EventResponseControl';
 import { EventProps } from '../types';
 import { useState, useEffect } from 'react';
+import EventCard from './EventCard'
 
 import {IconBallFootball, IconTournament, IconRun, IconHome, IconUsers, IconPlayerPlay} from '@tabler/icons-react';
 
@@ -12,100 +13,14 @@ interface EventListProps {
 
 export function EventList({ data }: EventListProps) {
   const [rowHTML, setRowHTML] = useState<JSX.Element | undefined>();
-  useEffect(() => {
-    const rows = data.map((item) => {
-      const startDate = item.startDate ? new Date(item.startDate) : null;
-      const formattedStartDate = startDate?.toLocaleString("de-DE", { 
-        weekday: 'short',
-        month: 'long', 
-        day: 'numeric' 
-      });
-      const startTime = item.startDate && item.startTime ? new Date(item.startDate + 'T' + item.startTime + 'Z'): null;
-      const formattedStartTime = startTime?.toLocaleString("de-DE", { 
-        hour: '2-digit',
-        minute: '2-digit', 
-      });
-      const meetTime = item.startDate && item.startTime ? new Date(item.startDate + 'T' + item.meetTime + 'Z'): null;
-      const formattedMeetTime = startTime?.toLocaleString("de-DE", { 
-        hour: '2-digit',
-        minute: '2-digit', 
-      });
-      setRowHTML(
-        <tr key={item.id}>
-          <td>
-            <Text size="sm">
-              {(() => {
-                switch (item.type) {
-                  case 'game':
-                    return <IconBallFootball/>;
-                  case 'friendly':
-                    return <IconBallFootball/>;
-                  case 'tournament':
-                    return <IconTournament/>;
-                  case 'training':
-                    return <IconRun/>;
-                  case 'indoortraining':
-                    return <IconHome/>;
-                  default:
-                    return <IconRun/>;
-                }
-              })()}
-            </Text>
-          </td>
-          <td>
-            <Text size="sm" >
-            {(() => {
-              switch (true) {
-                case (!!item.title):
-                  return item.title;
-                case (!!item.opponent):
-                  return item.opponent;
-                default:
-                  return "Event";
-                }
-              })()}
-            </Text>
-          </td>
-          <td>
-            <Text size="sm" >
-              {formattedStartDate}
-            </Text>
-          </td>
-          <td>
-          <Center>
-            <Text size="lg">
-              {formattedStartTime ? (
-                <>
-                  <IconPlayerPlay size={20}/> {formattedStartTime}
-                </>
-              ) : ''}
-              {formattedMeetTime ? (
-                <>
-                  <IconUsers/> {formattedMeetTime}
-                </>
-              ) : ''}
-            </Text>
-            </Center>
-          </td>
-          <td>
-            <Group spacing="sm" position='right'>
-              <EventResponseControl 
-                eventId={item.id} 
-                responses={item.responses}
-              />
-            </Group>
-          </td>
-        </tr>
-      );
-    });
-  }, [data]);
-    
-  
     return (
-      <ScrollArea>
-        <Table verticalSpacing="sm">
-          <tbody>{rowHTML}</tbody>
-        </Table>
-      </ScrollArea>
+      <Grid>
+        {data.map(event => (
+          <Grid.Col key={event.id} md={6} lg={3} sm={12}>
+            <EventCard key={event.id} {...event} />
+          </Grid.Col>
+        ))}
+      </Grid>
+      
     );
 }
