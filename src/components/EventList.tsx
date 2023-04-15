@@ -64,6 +64,27 @@ export function EventList({ data }: EventListProps) {
             </Text>
           </td>
           <td>
+            <Text size="sm" >
+              {formattedStartDate}
+            </Text>
+          </td>
+          <td>
+          <Center>
+            <Text size="lg">
+              {formattedStartTime ? (
+                <>
+                  <IconPlayerPlay size={20}/> {formattedStartTime}
+                </>
+              ) : ''}
+              {formattedMeetTime ? (
+                <>
+                  <IconUsers/> {formattedMeetTime}
+                </>
+              ) : ''}
+            </Text>
+            </Center>
+          </td>
+          <td>
             <Group spacing="sm" position='right'>
               <EventResponseControl 
                 eventId={item.id} 
