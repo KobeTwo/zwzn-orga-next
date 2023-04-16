@@ -14,24 +14,6 @@ interface LayoutProps {
 
 const Layout = ({ title = 'Next.js App', children }: LayoutProps) => {
     const theme = useMantineTheme();
-    const links = [
-        {
-          "link": "/about",
-          "label": "Features"
-        },
-        {
-          "link": "/pricing",
-          "label": "Pricing"
-        },
-        {
-          "link": "/learn",
-          "label": "Learn"
-        },
-        {
-          "link": "/community",
-          "label": "Community"
-        }
-      ]
     return (
       <>
         <Head>
