@@ -115,7 +115,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
   };
 
   return (
-    <SegmentedControl fullWidth size='lg'
+    <SegmentedControl fullWidth size='lg' transitionDuration={0}
                 data={[
                   { label:(
                       <Center>
