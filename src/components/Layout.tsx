@@ -45,7 +45,7 @@ const Layout = ({ title = 'Next.js App', children }: LayoutProps) => {
             }}
             padding="md"
             navbarOffsetBreakpoint="sm"
-            header={<AppHeader links={links}></AppHeader>}
+            header={<AppHeader></AppHeader>}
             >
             <main>{children}
             </main>
