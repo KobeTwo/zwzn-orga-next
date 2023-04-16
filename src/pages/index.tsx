@@ -5,7 +5,6 @@ import LoginButton from '@/components/LoginButton';
 export default function Home() {
   return (
       <Layout title="Home Page">
-        <LoginButton></LoginButton>
       </Layout>
   )
 }
