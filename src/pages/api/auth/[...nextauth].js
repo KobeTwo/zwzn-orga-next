@@ -12,6 +12,18 @@ export const authOptions = {
     // ...add more providers here
   ],
   callbacks: {
+    async session({ session, token, user }) {
+        // Send properties to the client, like an access_token and user id from a provider.
+        session.accessToken = token.accessToken
+        session.user.id = token.id
+        if(session.user.email === 'robertschmidt1906@gmail.com'){
+            session.user.isAdmin = true;
+        }else{
+            session.user.isAdmin = false;
+        }
+        
+        return session
+    },
     async signIn({ user, account, profile, email, credentials }) {
         const accessToken  = account.access_token;
         const response = await fetch('https://discordapp.com/api/users/@me/guilds', {

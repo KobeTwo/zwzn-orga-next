@@ -4,15 +4,18 @@ import {
   IconThumbUp,
   IconThumbDown,
   IconQuestionMark,
+  IconCircleLetterX, 
 } from '@tabler/icons-react';
 import React, { useState, useEffect } from 'react';
 import { useContext } from 'react';
 import { CurrentPlayerContext } from '../provider/CurrentPlayerProvider';
+import { useSession } from "next-auth/react"
 
 
 interface EventControlResponseProps {
     eventId: string;
     responses: EventResponseProps[]; 
+    showNotNominated: boolean;
   }
 
 interface ResponseState {
@@ -26,7 +29,9 @@ interface ResponseState {
 export function EventResponseControl(props: EventControlResponseProps) {
 
   const [selectedResponse, setSelectedResponse] = useState<ResponseState | null>(null);
-  const { currentPlayer, setCurrentPlayer } = useContext(CurrentPlayerContext);
+  const { currentPlayer } = useContext(CurrentPlayerContext);
+  const { data: session, status } = useSession()
+
   useEffect(() => {
     if(props.responses){
         const initialResponse = props.responses.find(response => response.playerId === currentPlayer?.id);
@@ -113,34 +118,58 @@ export function EventResponseControl(props: EventControlResponseProps) {
         );
     }
   };
+  const getSegmentControlData = () => {
+    const data = [];
+    data.push({
+      label:(
+        <Center>
+          <IconThumbUp size="1.5rem" />
+          {props.responses.filter(response => response.response === 'yes').length} 
+        </Center>
+      ), 
+      value: 'yes' }
+    );
+    data.push({
+      label:(
+        <Center>
+          <IconQuestionMark size="1.5rem" />
+          {props.responses.filter(response => response.response === 'maybe').length}
+        </Center>
+      ), 
+      value: 'maybe' }
+    );
+    data.push({
+      label:(
+        <Center>
+          <IconThumbDown size="1.5rem" />
+          {props.responses.filter(response => response.response === 'no').length}
+        </Center>
+      ), 
+      value: 'no' }
+    );
+    if(props.showNotNominated){
+      data.push({
+        label:(
+          <Center>
+            <IconCircleLetterX size="1.5rem" />
+            {props.responses.filter(response => response.response === 'notnominated').length}
+          </Center>
+          ), 
+        value: 'notnominated' }
+      );
+    }
+    return data;
+  };
 
   return (
-    <SegmentedControl fullWidth size='lg' transitionDuration={0}
-                data={[
-                  { label:(
-                      <Center>
-                        <IconThumbUp size="1.5rem" />
-                      </Center>
-                    ), 
-                    value: 'yes' 
-                  },
-                  { label:(
-                      <Center>
-                        <IconQuestionMark size="1.5rem" />
-                      </Center>
-                    ), 
-                    value: 'maybe' },
-                  { label:(
-                      <Center>
-                        <IconThumbDown size="1.5rem" />
-                      </Center>
-                    ), 
-                    value: 'no' },
-                ]}
-                
-                value={selectedResponse?.response ?? ''}
-                color={getColor()}
-                onChange={handleSegmentChange}
-              />
+    <div>
+      <SegmentedControl fullWidth size='lg' transitionDuration={0}
+        data={getSegmentControlData()}
+        value={selectedResponse?.response ?? ''}
+        color={getColor()}
+        onChange={handleSegmentChange}
+      />
+    </div>
+    
   );
 }

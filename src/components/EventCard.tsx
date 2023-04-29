@@ -1,8 +1,10 @@
 import { EventProps } from '@/types';
-import { Card, Text, Button, Group, createStyles, rem, Divider, Center } from '@mantine/core';
+import { Card, Text, Group, createStyles, rem, Grid, Center } from '@mantine/core';
 import { EventResponseControl } from './EventResponseControl';
 import {IconBallFootball, IconTournament, IconRun, IconHome} from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
+import { useSession } from "next-auth/react"
+import AdminPlayerListDrawer from './AdminPlayerListDrawer';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -52,6 +54,8 @@ const useStyles = createStyles((theme) => ({
 
 function EventCard(event: EventProps) {
   const { classes } = useStyles();
+
+  const { data: session, status } = useSession()
 
   const [hrWeekday, setHRWeekday] = useState<string | undefined>();
   const [hrStartDate, setHRStartDate] = useState<string | undefined>();
@@ -185,10 +189,25 @@ function EventCard(event: EventProps) {
         </Group>
       </Card.Section>
       <Card.Section>
-      <EventResponseControl 
-              eventId={event.id} 
-              responses={event.responses}
-            />
+
+       
+          <Grid justify="space-between">
+            <Grid.Col span="auto">
+              <EventResponseControl 
+                    eventId={event.id} 
+                    responses={event.responses}
+                    showNotNominated={false}
+                  />
+            </Grid.Col>
+              {session?.user.isAdmin ? 
+                <Grid.Col span={4}>
+                  <Group mr={4} position="right">
+                    <AdminPlayerListDrawer {...event}/>
+                  </Group>
+                </Grid.Col>
+              : null}
+          </Grid>
+        
       </Card.Section>
     </Card>
   )
