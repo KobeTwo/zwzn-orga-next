@@ -9,10 +9,9 @@ interface EventsProps {
 
 interface Event {
   attributes: {
-    startDate: string;
-    startTime: string;
-    meetTime: string;
-    endTime: string
+    startDateTime: string;
+    meetDateTime: string;
+    endDateTime: string
     type: string;
     opponent: string;
     title: string;
@@ -70,10 +69,9 @@ export const getServerSideProps: GetServerSideProps<EventsProps> = async (contex
         });
       }
         return {
-            startDate: event.attributes.startDate,
-            startTime: event.attributes.startTime,
-            meetTime: event.attributes.meetTime,
-            endTime: event.attributes.endTime,
+            startDateTime: event.attributes.startDateTime,
+            meetDateTime: event.attributes.meetDateTime,
+            endDateTime: event.attributes.endDateTime,
             type: event.attributes.type,
             id: event.id,
             responses: responses,

@@ -1,8 +1,7 @@
 export interface EventProps {
-    startDate: string; 
-    startTime: string;
-    meetTime: string;
-    endTime: string;
+    startDateTime: string; 
+    meetDateTime: string;
+    endDateTime: string;
     type: string; 
     id: string; 
     responses: EventResponseProps[]; 

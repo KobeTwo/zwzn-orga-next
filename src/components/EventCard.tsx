@@ -59,34 +59,33 @@ function EventCard(event: EventProps) {
   const [hrMeetTime, setHRMeetTime] = useState<string | undefined>();
   const [hrEndTime, setHREndTime] = useState<string | undefined>();
   useEffect(() => {
-      const startDate = event.startDate ? new Date(event.startDate) : null;
-      const formattedWeekday = startDate?.toLocaleString("de-DE", { 
+
+
+      const startDateTime = event.startDateTime ? new Date(event.startDateTime): null;
+      const formattedStartTime = startDateTime?.toLocaleString("de-DE", { 
+        hour: '2-digit',
+        minute: '2-digit', 
+      });
+      const formattedWeekday = startDateTime?.toLocaleString("de-DE", { 
         weekday: 'short'
       });
-      const formattedStartDate = startDate?.toLocaleString("de-DE", { 
+      const formattedStartDate = startDateTime?.toLocaleString("de-DE", { 
         month: 'long', 
         day: 'numeric' 
       });
       setHRWeekday(formattedWeekday);
       setHRStartDate(formattedStartDate);
-
-      const startTime = event.startDate && event.startTime ? new Date(event.startDate + 'T' + event.startTime + 'Z'): null;
-      const formattedStartTime = startTime?.toLocaleString("de-DE", { 
-        hour: '2-digit',
-        minute: '2-digit', 
-      });
       setHRStartTime(formattedStartTime);
 
-      const meetTime = event.startDate && event.meetTime ? new Date(event.startDate + 'T' + event.meetTime + 'Z'): null;
-      const formattedMeetTime = meetTime?.toLocaleString("de-DE", { 
+      const meetDateTime = event.meetDateTime ? new Date(event.meetDateTime): null;
+      const formattedMeetTime = meetDateTime?.toLocaleString("de-DE", { 
         hour: '2-digit',
         minute: '2-digit', 
       });
       setHRMeetTime(formattedMeetTime);
 
-      console.log('ENDTIME: ' + event.endTime)
-      const endTime = event.startDate && event.endTime ? new Date(event.startDate + 'T' + event.endTime + 'Z'): null;
-      const formattedEndTime = endTime?.toLocaleString("de-DE", { 
+      const endDateTime = event.endDateTime ? new Date(event.endDateTime): null;
+      const formattedEndTime = endDateTime?.toLocaleString("de-DE", { 
         hour: '2-digit',
         minute: '2-digit', 
       });
