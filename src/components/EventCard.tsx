@@ -205,7 +205,8 @@ function EventCard(event: EventProps) {
                   />
                   : null}
             </Grid.Col>
-              {session?.user?.isAdmin ? 
+              {/* @ts-ignore */}
+              { session?.user?.isAdmin ? 
                 <Grid.Col span={4}>
                   <Group mr={4} position="right">
                     <AdminPlayerListModal {...event}/>
