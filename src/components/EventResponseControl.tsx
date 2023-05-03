@@ -1,4 +1,4 @@
-import { EventResponseProps } from '@/types';
+import { EventProps, EventResponseProps, PlayerProps } from '@/types';
 import { SegmentedControl, Center } from '@mantine/core';
 import {
   IconThumbUp,
@@ -7,15 +7,13 @@ import {
   IconCircleLetterX, 
 } from '@tabler/icons-react';
 import React, { useState, useEffect } from 'react';
-import { useContext } from 'react';
-import { CurrentPlayerContext } from '../provider/CurrentPlayerProvider';
-import { useSession } from "next-auth/react"
 
 
 interface EventControlResponseProps {
-    eventId: string;
-    responses: EventResponseProps[]; 
+    event: EventProps;
+    player: PlayerProps;
     showNotNominated: boolean;
+    showTotals: boolean;
   }
 
 interface ResponseState {
@@ -29,12 +27,10 @@ interface ResponseState {
 export function EventResponseControl(props: EventControlResponseProps) {
 
   const [selectedResponse, setSelectedResponse] = useState<ResponseState | null>(null);
-  const { currentPlayer } = useContext(CurrentPlayerContext);
-  const { data: session, status } = useSession()
 
   useEffect(() => {
-    if(props.responses){
-        const initialResponse = props.responses.find(response => response.playerId === currentPlayer?.id);
+    if(props.event.responses){
+        const initialResponse = props.event.responses.find(response => response.playerId === props.player.id);
         if(initialResponse ){
             console.log('HANDLE USE EFFECT:' +JSON.stringify(initialResponse))
             setSelectedResponse(
@@ -45,7 +41,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
                 })
         }
     }
-  }, [currentPlayer, props.eventId, props.responses]);
+  }, [props.player, props.event.id, props.event.responses]);
 
   const updateEventResponseDB = async (id: string | undefined, response: string, eventId: string, playerId: string): Promise<string | undefined> => {
     try {
@@ -79,24 +75,22 @@ export function EventResponseControl(props: EventControlResponseProps) {
   const handleSegmentChange = async (value:string) => {
 
     if (selectedResponse && value !== selectedResponse.response) {
-        console.log(`Selected value: ${value} for event ID: ${props.eventId}`);
-        await updateEventResponseDB(selectedResponse.id, value, props.eventId, selectedResponse.playerId);
+        console.log(`Selected value: ${value} for event ID: ${props.event.id}`);
+        await updateEventResponseDB(selectedResponse.id, value, props.event.id, selectedResponse.playerId);
         setSelectedResponse({
             id: selectedResponse.id,
             response: value,
             playerId: selectedResponse.playerId
         });
     }else{
-        if(currentPlayer){
-            let eventResponseId = await updateEventResponseDB(undefined, value, props.eventId, currentPlayer.id);
-            console.log('EventResponseID: ' + eventResponseId);
-            if(eventResponseId ){
-                setSelectedResponse({
-                    id: eventResponseId,
-                    response: value,
-                    playerId: currentPlayer.id
-                });
-            }
+          let eventResponseId = await updateEventResponseDB(undefined, value, props.event.id, props.player.id);
+          console.log('EventResponseID: ' + eventResponseId);
+          if(eventResponseId ){
+              setSelectedResponse({
+                  id: eventResponseId,
+                  response: value,
+                  playerId: props.player.id
+              });
         }
     }
     
@@ -124,7 +118,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
       label:(
         <Center>
           <IconThumbUp size="1.5rem" />
-          {props.responses.filter(response => response.response === 'yes').length} 
+          {props.showTotals ? props.event.responses.filter(response => response.response === 'yes').length : null} 
         </Center>
       ), 
       value: 'yes' }
@@ -133,7 +127,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
       label:(
         <Center>
           <IconQuestionMark size="1.5rem" />
-          {props.responses.filter(response => response.response === 'maybe').length}
+          {props.showTotals ? props.event.responses.filter(response => response.response === 'maybe').length : null}
         </Center>
       ), 
       value: 'maybe' }
@@ -142,7 +136,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
       label:(
         <Center>
           <IconThumbDown size="1.5rem" />
-          {props.responses.filter(response => response.response === 'no').length}
+          {props.showTotals ? props.event.responses.filter(response => response.response === 'no').length : null}
         </Center>
       ), 
       value: 'no' }
@@ -152,7 +146,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
         label:(
           <Center>
             <IconCircleLetterX size="1.5rem" />
-            {props.responses.filter(response => response.response === 'notnominated').length}
+            {props.showTotals ? props.event.responses.filter(response => response.response === 'notnominated').length : null} 
           </Center>
           ), 
         value: 'notnominated' }

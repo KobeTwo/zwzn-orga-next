@@ -15,3 +15,9 @@ export interface EventResponseProps {
     playerName: string;
     playerId: string;
 }
+
+export interface PlayerProps {
+    avatar: string; 
+    name: string; 
+    id: string ;
+}

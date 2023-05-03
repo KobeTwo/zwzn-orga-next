@@ -4,7 +4,9 @@ import { EventResponseControl } from './EventResponseControl';
 import {IconBallFootball, IconTournament, IconRun, IconHome} from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react"
-import AdminPlayerListDrawer from './AdminPlayerListDrawer';
+import { useContext } from 'react';
+import { CurrentPlayerContext } from '../provider/CurrentPlayerProvider';
+import AdminPlayerListModal from './AdminPlayerListModal';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -56,6 +58,7 @@ function EventCard(event: EventProps) {
   const { classes } = useStyles();
 
   const { data: session, status } = useSession()
+  const { currentPlayer } = useContext(CurrentPlayerContext);
 
   const [hrWeekday, setHRWeekday] = useState<string | undefined>();
   const [hrStartDate, setHRStartDate] = useState<string | undefined>();
@@ -193,16 +196,19 @@ function EventCard(event: EventProps) {
        
           <Grid justify="space-between">
             <Grid.Col span="auto">
+              {currentPlayer ? 
               <EventResponseControl 
-                    eventId={event.id} 
-                    responses={event.responses}
+                    event={event} 
                     showNotNominated={false}
+                    showTotals={true}
+                    player={currentPlayer}
                   />
+                  : null}
             </Grid.Col>
               {session?.user.isAdmin ? 
                 <Grid.Col span={4}>
                   <Group mr={4} position="right">
-                    <AdminPlayerListDrawer {...event}/>
+                    <AdminPlayerListModal {...event}/>
                   </Group>
                 </Grid.Col>
               : null}
