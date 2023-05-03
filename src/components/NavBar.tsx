@@ -97,8 +97,8 @@ const NavBar = ({}: NavBarProps) => {
           <Navbar.Section>
             <Stack justify="center" spacing={0}>
               CP: {currentPlayer?.id}
-              <Avatar alt={currentPlayer?.playerName} size="md" src={currentPlayer?.imageURL ? process.env.NEXT_PUBLIC_STRAPI_HOST + currentPlayer?.imageURL : null} radius="md" >
-                {currentPlayer?.playerName.charAt(0).toUpperCase()} 
+              <Avatar alt={currentPlayer?.name} size="md" src={currentPlayer?.avatar ? process.env.NEXT_PUBLIC_STRAPI_HOST + currentPlayer?.avatar : null} radius="md" >
+                {currentPlayer?.name.charAt(0).toUpperCase()} 
               </Avatar>
               <NavbarLink icon={IconLogout} label="Logout" href='/'/>
             </Stack>
