@@ -108,6 +108,10 @@ export function EventResponseControl(props: EventControlResponseProps) {
         return (
           'red'
         );
+        case 'notnominated':
+          return (
+            'red'
+          );
       default:
         return (
           'gray'
