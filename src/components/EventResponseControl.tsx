@@ -12,8 +12,10 @@ import React, { useState, useEffect } from 'react';
 interface EventControlResponseProps {
     event: EventProps;
     player: PlayerProps;
-    showNotNominated: boolean;
-    showTotals: boolean;
+    showNotNominated?: boolean;
+    showTotals?: boolean;
+    fullWidth?: boolean;
+    size?: string;
   }
 
 interface ResponseState {
@@ -157,7 +159,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
 
   return (
     <div>
-      <SegmentedControl fullWidth size='lg' transitionDuration={0}
+      <SegmentedControl fullWidth={props.fullWidth !== undefined ? props.fullWidth : true} size={props.size ? props.size : 'lg'} transitionDuration={0}
         data={getSegmentControlData()}
         value={selectedResponse?.response ?? ''}
         color={getColor()}

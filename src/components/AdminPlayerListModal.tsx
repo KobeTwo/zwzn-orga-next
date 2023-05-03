@@ -1,5 +1,5 @@
 import { useDisclosure } from '@mantine/hooks';
-import { Modal, Button, Avatar, Grid, Group } from '@mantine/core';
+import { Modal, Button, Avatar, Stack, Group } from '@mantine/core';
 import {IconUsersGroup} from '@tabler/icons-react';
 import { EventProps, PlayerProps } from '@/types';
 import React, { useState, useEffect } from 'react';
@@ -57,22 +57,21 @@ function AdminPlayerListModal(event: EventProps) {
         title={event.title + ' ' + hrStartDate}
         size="md"
       >
-        {allPlayers?.map(player => (
-          <Grid key={player.id}>
-            <Grid.Col span={4}>
-              <Group>
-                <Avatar alt={player.name} size="md" src={player.avatar ? process.env.NEXT_PUBLIC_STRAPI_HOST + player.avatar : null} radius="md" >
-                    {player.name.charAt(0).toUpperCase()} 
-                </Avatar>
-                {player.name}
+        <Stack>
+          {allPlayers?.map(player => (
+            <Group key={player.id} position='apart'>
+                <Group>
+                  <Avatar alt={player.name} size="md" src={player.avatar ? process.env.NEXT_PUBLIC_STRAPI_HOST + player.avatar : null} radius="md" >
+                      {player.name.charAt(0).toUpperCase()} 
+                  </Avatar>
+                  {player.name}
+                </Group>
+                <EventResponseControl event={event} showNotNominated={true} player={player} showTotals={false} fullWidth={false} size='xs'/>
               </Group>
-            </Grid.Col>
-            <Grid.Col span={8}>
-              <EventResponseControl event={event} showNotNominated={true} player={player} showTotals={false}/>
-            </Grid.Col>
-          </Grid>
-        ))}
+          ))}
+        </Stack>
       </Modal>
+      
 
       <Button size="lg" variant="filled" onClick={open}><IconUsersGroup size="1.5rem" /></Button>
 
