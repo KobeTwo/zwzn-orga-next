@@ -1,5 +1,5 @@
 import { EventProps, EventResponseProps, PlayerProps } from '@/types';
-import { SegmentedControl, Center } from '@mantine/core';
+import { SegmentedControl, Center, Text } from '@mantine/core';
 import {
   IconThumbUp,
   IconThumbDown,
@@ -12,7 +12,7 @@ import React, { useState, useEffect } from 'react';
 interface EventControlResponseProps {
     event: EventProps;
     player: PlayerProps;
-    showNotNominated?: boolean;
+    adminMode?: boolean;
     showTotals?: boolean;
     fullWidth?: boolean;
     size?: string;
@@ -124,7 +124,7 @@ export function EventResponseControl(props: EventControlResponseProps) {
       label:(
         <Center>
           <IconThumbUp size="1.5rem" />
-          {props.showTotals ? props.event.responses.filter(response => response.response === 'yes').length : null} 
+          <Text fz="md">{props.showTotals ? props.event.responses.filter(response => response.response === 'yes').length : null} </Text>
         </Center>
       ), 
       value: 'yes' }
@@ -133,41 +133,66 @@ export function EventResponseControl(props: EventControlResponseProps) {
       label:(
         <Center>
           <IconQuestionMark size="1.5rem" />
-          {props.showTotals ? props.event.responses.filter(response => response.response === 'maybe').length : null}
+          <Text fz="md">{props.showTotals ? props.event.responses.filter(response => response.response === 'maybe').length : null}</Text>
         </Center>
       ), 
       value: 'maybe' }
     );
-    data.push({
-      label:(
-        <Center>
-          <IconThumbDown size="1.5rem" />
-          {props.showTotals ? props.event.responses.filter(response => response.response === 'no').length : null}
-        </Center>
-      ), 
-      value: 'no' }
-    );
-    if(props.showNotNominated){
+    if(props.adminMode){
+      data.push({
+        label:(
+          <Center>
+            <IconThumbDown size="1.5rem" />
+            <Text fz="md">{props.showTotals ? props.event.responses.filter(response => response.response === 'no').length : null}</Text>
+          </Center>
+        ), 
+        value: 'no' }
+      );
       data.push({
         label:(
           <Center>
             <IconCircleLetterX size="1.5rem" />
-            {props.showTotals ? props.event.responses.filter(response => response.response === 'notnominated').length : null} 
+            <Text fz="md">{props.showTotals ? props.event.responses.filter(response => response.response === 'notnominated').length : null} </Text>
           </Center>
           ), 
         value: 'notnominated' }
       );
+    }else{
+      if(selectedResponse?.response === 'notnominated'){
+        data.push({
+          label:(
+            <Center>
+              <IconCircleLetterX size="1.5rem" />
+            </Center>
+          ), 
+          value: 'notnominated' }
+        );
+      }else{
+        data.push({
+          label:(
+            <Center>
+              <IconThumbDown size="1.5rem" />
+              <Text fz="md">{props.showTotals ? props.event.responses.filter(response => response.response === 'no').length : null}</Text>
+            </Center>
+          ), 
+          value: 'no' }
+        );
+      }
     }
     return data;
   };
 
   return (
     <div>
-      <SegmentedControl fullWidth={props.fullWidth !== undefined ? props.fullWidth : true} size={props.size ? props.size : 'lg'} transitionDuration={0}
+      <SegmentedControl 
+        fullWidth={props.fullWidth !== undefined ? props.fullWidth : true} 
+        size={props.size ? props.size : 'lg'} 
+        transitionDuration={0}
         data={getSegmentControlData()}
         value={selectedResponse?.response ?? ''}
         color={getColor()}
         onChange={handleSegmentChange}
+        disabled={!props.adminMode && selectedResponse?.response === 'notnominated'}
       />
     </div>
     

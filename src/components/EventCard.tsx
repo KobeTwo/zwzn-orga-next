@@ -199,7 +199,7 @@ function EventCard(event: EventProps) {
               {currentPlayer ? 
               <EventResponseControl 
                     event={event} 
-                    showNotNominated={false}
+                    adminMode={false}
                     showTotals={true}
                     player={currentPlayer}
                   />

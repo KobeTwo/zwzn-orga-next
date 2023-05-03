@@ -66,14 +66,14 @@ function AdminPlayerListModal(event: EventProps) {
                   </Avatar>
                   {player.name}
                 </Group>
-                <EventResponseControl event={event} showNotNominated={true} player={player} showTotals={false} fullWidth={false} size='xs'/>
+                <EventResponseControl event={event} adminMode={true} player={player} showTotals={false} fullWidth={false} size='xs'/>
               </Group>
           ))}
         </Stack>
       </Modal>
       
 
-      <Button size="lg" variant="filled" onClick={open}><IconUsersGroup size="1.5rem" /></Button>
+      <Button mt={3} size="md" variant="filled" onClick={open}><IconUsersGroup size="1.5rem" /></Button>
 
     </>
   );
