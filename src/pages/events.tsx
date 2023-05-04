@@ -54,7 +54,8 @@ const EventsPage: NextPage<EventsProps> = ({ eventData }) => {
   };
 
 export const getServerSideProps: GetServerSideProps<EventsProps> = async (context) => {
-    const res = await fetch(process.env.NEXT_PUBLIC_STRAPI_HOST + '/api/events?populate[event_responses][populate][0]=player');
+    const currentDate = new Date().toISOString();
+    const res = await fetch(process.env.NEXT_PUBLIC_STRAPI_HOST + '/api/events?populate[event_responses][populate][0]=player&filters[startDateTime][$gt]='+currentDate);
     const resJSON = await res.json();
     const events = resJSON.data.map((event:Event) => {
     let responses : Response[] = [];
